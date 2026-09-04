@@ -14,9 +14,7 @@ class Solution {
     }
     public int findMin(int[] nums) {
         int n = nums.length;
-        int a = peak(nums, 0, n-1);
-        int min = nums[a];
-
-        return min;
+        int ans = peak(nums, 0, n-1);
+        return nums[ans];
     }
 }
