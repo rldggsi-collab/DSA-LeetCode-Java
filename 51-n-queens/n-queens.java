@@ -1,44 +1,55 @@
 class Solution {
-    public void Queen(int col,List<String> board,List<List<String>> ans,int leftrow[],int loDigonal[],int upDigonal[],int n){
-        if(col==n){
-            ans.add(new ArrayList<>(board));
+    public boolean safe(int n ,char board[][], int row, int col){
+        int uprow = row;
+        int upcol = col;
+
+        while(row>=0 && col>=0){
+            if(board[row][col] == 'Q') return false;
+            row--;
+            col--;
+        }
+
+        row = uprow;
+        col = upcol;
+        while(col>=0){
+            if(board[row][col] == 'Q') return false;
+            col--;
+        }
+
+        row = uprow;
+        col = upcol;
+        while(row<n && col>=0){
+            if(board[row][col] == 'Q') return false;
+            row++;
+            col--;
+        }
+        return true;
+    }
+    public void queen(int n, char board[][], List<List<String>> res, int col){
+        if(col == n){
+            List<String> temp = new ArrayList<>();
+            for(int i = 0; i<n;i++){
+                temp.add(new String(board[i]));
+            }
+            res.add(temp);
             return;
         }
 
         for(int row = 0; row<n; row++){
-            if(leftrow[row] == 0 && loDigonal[row+col] == 0 && upDigonal[n-1 + col-row]==0){
-                char[] currRow = board.get(row).toCharArray();
-                currRow[col] = 'Q';
-                board.set(row,new String(currRow));
-
-                leftrow[row] = 1;
-                loDigonal[row+col] = 1;
-                upDigonal[n-1 + col-row] = 1;
-
-                Queen(col+1,board,ans,leftrow,loDigonal,upDigonal,n);
-
-                char[] cuurrRow = board.get(row).toCharArray();
-                currRow[col] = '.';
-                board.set(row,new String(currRow));
-
-                leftrow[row] = 0;
-                loDigonal[row+col] = 0;
-                upDigonal[n-1 + col-row] = 0;
+            if(safe(n,board,row,col)){
+                board[row][col] = 'Q';
+                queen(n,board,res,col+1);
+                board[row][col] = '.';
             }
         }
     }
     public List<List<String>> solveNQueens(int n) {
-        List<String> board = new ArrayList<>();
-        List<List<String>> ans = new ArrayList<>();
-
-        for(int i = 0; i<n;i++){
-            board.add(".".repeat(n));
+        char board[][] = new char[n][n];
+        List<List<String>> res = new ArrayList<>();
+        for(int i = 0; i<n; i++){
+           Arrays.fill(board[i],'.');
         }
-        int leftrow[] = new int[n];
-        int loDigonal[] = new int[2*n-1];
-        int upDigonal[] = new int[2*n-1];
-        Queen(0,board,ans,leftrow,loDigonal,upDigonal,n);
-
-        return ans; 
+        queen(n,board,res,0);
+        return res;
     }
 }
