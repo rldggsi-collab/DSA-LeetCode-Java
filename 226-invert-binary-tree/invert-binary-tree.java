@@ -22,10 +22,6 @@ class Solution {
         Queue<TreeNode> q = new ArrayDeque<>();
         q.add(root);
         while(!q.isEmpty()){
-            int lev = q.size();
-            while(lev>0){
-                lev--;
-
                 TreeNode t = q.peek();
                 q.remove();
 
@@ -39,7 +35,6 @@ class Solution {
                 TreeNode temp = t.left;
                 t.left = t.right;
                 t.right = temp;
-            }
         }
         return root;
     }
